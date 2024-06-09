@@ -122,4 +122,12 @@ public class Ticket {
     public void setPrice(int price){
         this.price = price;
     }
+
+    public char getStadiumSector() {
+        return this.stadium_sector;
+    }
+
+    public String getId() {
+        return this.ID;
+    }
 }
