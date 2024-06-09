@@ -2,11 +2,9 @@ package com.andersen.lesson2;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 
 public class TicketService {
@@ -25,6 +23,8 @@ public class TicketService {
         ticketStorage.add(full_ticket);
         ticketStorage.add(limited_ticket);
 
+        // trying to get some tickets by its stadiumSector value
+        // and printing them for debug
         final var ticketWithStadiumSectorB = getTicketByStadiumSector(ticketStorage, 'B');
         System.out.printf(
                 "Ticket from ticketStorage with stadiumSector == 'B': %s\n",
@@ -60,6 +60,4 @@ public class TicketService {
         }
         return null;
     }
-
-
 }
