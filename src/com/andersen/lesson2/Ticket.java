@@ -116,4 +116,12 @@ public class Ticket {
         this.price = price;
         System.out.println("Price is saved.");
     }
+
+    public void setID(String id){
+        this.ID = id;
+    }
+
+    public String getID(){
+        return this.ID;
+    }
 }
