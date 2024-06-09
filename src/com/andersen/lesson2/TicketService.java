@@ -26,4 +26,15 @@ public class TicketService {
         System.out.println("Price is saved.");
     }
 
+    public static Ticket getTicketByID(Ticket[] tickets, String ID){
+        int found = 0;
+        for(int i=0; i<tickets.length; i++){
+            if(tickets[i].getID().equals(ID)){
+                System.out.println("ticket.id["+i+"]="+tickets[i].getID());
+                found = i;
+                break;
+            }
+        }
+        return tickets[found];
+    }
 }

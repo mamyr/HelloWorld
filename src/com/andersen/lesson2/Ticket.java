@@ -107,6 +107,14 @@ public class Ticket {
         }
     }
 
+    public void setID(String id){
+        this.ID = id;
+    }
+
+    public String getID(){
+        return this.ID;
+    }
+
     public long getCreat_time(){
         return this.creat_time;
     }
