@@ -128,6 +128,6 @@ public class Ticket {
     }
 
     public String getId() {
-        return this.ID;
+        return this.concert_hall;
     }
 }
