@@ -2,6 +2,7 @@ package com.andersen.lesson2;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Date;
 
 
@@ -26,4 +27,12 @@ public class TicketService {
         System.out.println("Price is saved.");
     }
 
+    private static Ticket getTicketByStadiumSector(Collection<Ticket> ticketStorage, char stadiumSector) {
+        for (final var ticket : ticketStorage) {
+            if (ticket.getStadiumSector() == stadiumSector) {
+                return ticket;
+            }
+        }
+        return null;
+    }
 }
