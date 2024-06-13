@@ -119,6 +119,10 @@ public class Ticket {
         return  this.price;
     }
 
+    public char getStadiumSector() {
+        return this.stadium_sector;
+    }
+
     public void setPrice(int price){
         this.price = price;
     }

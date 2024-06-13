@@ -59,8 +59,8 @@ public class TicketService {
         System.out.println("Price is saved.");
     }
 
-    private static Ticket getTicketByStadiumSector(Collection<Ticket> tickets, char stadiumSector) {
-        for (final var ticket : tickets) {
+    private static Ticket getTicketByStadiumSector(Collection<Ticket> ticketStorage, char stadiumSector) {
+        for (final var ticket : ticketStorage) {
             if (ticket.getStadiumSector() == stadiumSector) {
                 return ticket;
             }
