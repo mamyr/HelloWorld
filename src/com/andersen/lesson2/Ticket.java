@@ -126,8 +126,13 @@ public class Ticket {
     public char getStadiumSector() {
         return this.stadium_sector;
     }
+  
+    public void setID(String id){
+        this.ID = id;
+    }
 
-    public String getId() {
+    public String getID(){
+
         return this.ID;
     }
 }
