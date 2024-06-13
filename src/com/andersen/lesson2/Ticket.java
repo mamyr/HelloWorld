@@ -122,4 +122,12 @@ public class Ticket {
     public void setPrice(int price){
         this.price = price;
     }
+
+    public void setID(String id){
+        this.ID = id;
+    }
+
+    public String getID(){
+        return this.ID;
+    }
 }
