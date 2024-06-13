@@ -123,11 +123,16 @@ public class Ticket {
         this.price = price;
     }
 
+    public char getStadiumSector() {
+        return this.stadium_sector;
+    }
+  
     public void setID(String id){
         this.ID = id;
     }
 
     public String getID(){
+
         return this.ID;
     }
 }
