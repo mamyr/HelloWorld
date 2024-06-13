@@ -1,7 +1,9 @@
 package com.andersen.lesson2;
 import java.lang.Exception;
+import java.util.logging.Logger;
 
 public abstract class AnyClass {
+    private static Logger logger = Logger.getLogger(String.valueOf(AnyClass.class));
 
     @NullableWarning(value = "Variable id is null in class AnyClass")
     private Integer id;
@@ -19,6 +21,6 @@ public abstract class AnyClass {
     }
 
     public void print(){
-        System.out.println("print content in console");
+        logger.info("print content in console");
     }
 }
