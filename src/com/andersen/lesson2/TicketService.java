@@ -1,9 +1,11 @@
 package com.andersen.lesson2;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Date;
 
-
 public class TicketService {
+
     public static void main(String[] args) {
         Ticket empty_ticket = new Ticket();
         long time_now = new Date().getTime();
@@ -17,8 +19,18 @@ public class TicketService {
         printTickets(tickets);
         getTicketByID(tickets, "0000");
         
-        empty_ticket.save_create_time(time_now);
-        empty_ticket.save_price(4);
+        save_create_time(time_now, full_ticket);
+        save_price(4, limited_ticket);
+    }
+
+    public static void save_create_time(long time, @org.jetbrains.annotations.NotNull Ticket t){
+        t.setCreat_time(time/1000L);
+        System.out.println("Creation time is saved.");
+    }
+
+    public static void save_price(int price, @NotNull Ticket t){
+        t.setPrice(price);
+        System.out.println("Price is saved.");
     }
 
     public static void printTickets(Ticket[] tickets){
@@ -38,4 +50,5 @@ public class TicketService {
         }
         return tickets[foundIndex];
     }
+
 }

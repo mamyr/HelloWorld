@@ -9,13 +9,13 @@ public class Ticket {
     private static final Pattern event_code_template = Pattern.compile("\\d{3}");
     private static final Pattern stadium_sector_template = Pattern.compile("[ABC]");
 
-    private String ID;
-    private String concert_hall;
-    private int event_code;
+    private String ID = "0000";
+    private String concert_hall = "concealer";
+    private int event_code = 100;
     private long time = System.currentTimeMillis() / 1000L;
-    private boolean is_promo;
-    private char stadium_sector;
-    private double backpack_weight;
+    private boolean is_promo = false;
+    private char stadium_sector = 'A';
+    private double backpack_weight = 1000.12;
 
     private long creat_time = System.currentTimeMillis() / 1000L;
     private int price = 13;
@@ -107,14 +107,20 @@ public class Ticket {
         }
     }
 
-    public void save_create_time(long time){
-        this.creat_time = time/1000L;
-        System.out.println("Creation time is saved.");
+    public long getCreat_time(){
+        return this.creat_time;
     }
 
-    public void save_price(int price){
+    public void setCreat_time(long time){
+        this.creat_time = time;
+    }
+
+    public int getPrice(){
+        return  this.price;
+    }
+
+    public void setPrice(int price){
         this.price = price;
-        System.out.println("Price is saved.");
     }
 
     public void setID(String id){
