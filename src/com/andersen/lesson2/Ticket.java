@@ -229,5 +229,16 @@ public class Ticket extends AnyClass{
         int resultCreateTime = this.creat_time != 0 ? String.valueOf(this.creat_time).hashCode() : 0;
         int result = this.getId() + 4 * resultID + 4 * resultConcertHall + 4 * resultTime + resultIsPromo + 4 * resultStadiumSector + 4 * resultBackpackWeight + this.price + 4 * resultCreateTime + this.event_code;
         return result;
+
+    public char getStadiumSector() {
+        return this.stadium_sector;
+    }
+  
+    public void setID(String id) {
+        this.ID = id;
+    }
+
+    public String getID() {
+        return this.ID;
     }
 }
