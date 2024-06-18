@@ -5,14 +5,32 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
-public class TicketService {
+
+public class TicketService implements Service {
+    private static Logger logger = Logger.getLogger(String.valueOf(TicketService.class));
 
     public static void main(String[] args) {
+        StringBuilder builder = new StringBuilder("");
         Ticket empty_ticket = new Ticket();
+        try {
+            logger.info(builder.append("empty ticket id is:").append(empty_ticket.getId()).toString());
+        } catch (Exception ignored){
+            logger.severe("Variable id is null in class AnyClass");
+        }
         long time_now = new Date().getTime();
         Ticket full_ticket = new Ticket("A001","qwertyuiop",201,time_now,true,'B',405.45);
         Ticket limited_ticket = new Ticket("asdfghjklm", 301, time_now);
+
+        saveCreateTime(time_now, full_ticket);
+        savePrice(4, limited_ticket);
+
+        Client c = new Client();
+        Ticket t = c.getTicket();
+        Admin a = new Admin();
+        a.checkTicket(t);
 
         Ticket[] tickets = new Ticket[10];
         for(int i=0; i<10; i++) {
@@ -21,9 +39,6 @@ public class TicketService {
         printTickets(tickets);
         getTicketByID(tickets, "0000");
         
-        save_create_time(time_now, full_ticket);
-        save_price(4, limited_ticket);
-
         // creating a collection (ArrayList) with tickets
         final var ticketStorage = new ArrayList<Ticket>(3);
         ticketStorage.add(empty_ticket);
@@ -36,7 +51,7 @@ public class TicketService {
         System.out.printf(
                 "Ticket from ticketStorage with stadiumSector == 'B': %s\n",
                 ticketWithStadiumSectorB != null
-                        ? ticketWithStadiumSectorB.getId()
+                        ? ticketWithStadiumSectorB.getID()
                         : "doesn't exist!"
         );
 
@@ -44,19 +59,29 @@ public class TicketService {
         System.out.printf(
                 "Ticket from ticketStorage with stadiumSector == 'C': %s\n",
                 ticketWithStadiumSectorC != null
-                        ? ticketWithStadiumSectorC.getId()
+                        ? ticketWithStadiumSectorC.getID()
                         : "doesn't exist!"
         );
     }
 
-    public static void save_create_time(long time, @org.jetbrains.annotations.NotNull Ticket t){
+    public static void saveCreateTime(long time, @org.jetbrains.annotations.NotNull Ticket t){
         t.setCreat_time(time/1000L);
-        System.out.println("Creation time is saved.");
+        logger.info("Creation time is saved.");
     }
 
-    public static void save_price(int price, @NotNull Ticket t){
+    public static void savePrice(int price, @NotNull Ticket t){
         t.setPrice(price);
-        System.out.println("Price is saved.");
+        logger.info("Price is saved.");
+    }
+
+    public void shareByPhone(String phone, Ticket ticket){
+        StringBuilder builder = new StringBuilder("");
+        logger.info(builder.append("Share ticket ID=").append(ticket.getID()).append(" by this phone:").append(phone).toString());
+    }
+
+    public void shareByPhoneAndEmail(String phone, String email, Ticket ticket){
+        StringBuilder builder = new StringBuilder("");
+        logger.info(builder.append("Share ticket ID=").append(ticket.getID()).append(" by this phone:").append(phone).append(" and email:").append(email).toString());
     }
 
     private static Ticket getTicketByStadiumSector(Collection<Ticket> tickets, char stadiumSector) {
