@@ -1,6 +1,8 @@
 package org.example;
 
 public class BusTicket {
+    private int id;
+
     private String ticketClass;
 
     private String ticketType;
@@ -8,6 +10,10 @@ public class BusTicket {
     private String startDate;
 
     private String price;
+
+    public int getId() { return this.id; }
+
+    public void setId(int id) { this.id = id;}
 
     public String getTicketClass(){
         return this.ticketClass;
