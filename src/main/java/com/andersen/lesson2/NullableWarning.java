@@ -1,7 +1,5 @@
 package com.andersen.lesson2;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
