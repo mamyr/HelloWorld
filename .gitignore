@@ -4,6 +4,9 @@ out/
 !**/src/test/**/out/
 .idea/
 .gradle/
+build/
+gradle/
+target/
 
 ### Eclipse ###
 .apt_generated
