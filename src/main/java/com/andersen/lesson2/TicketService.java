@@ -1,7 +1,5 @@
 package com.andersen.lesson2;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -67,12 +65,12 @@ public class TicketService implements Service {
         );
     }
 
-    public static void saveCreateTime(long time, @org.jetbrains.annotations.NotNull Ticket t){
+    public static void saveCreateTime(long time, Ticket t){
         t.setCreatTime(time/1000L);
         logger.info("Creation time is saved.");
     }
 
-    public static void savePrice(int price, @NotNull Ticket t){
+    public static void savePrice(int price, Ticket t){
         t.setPrice(price);
         logger.info("Price is saved.");
     }
