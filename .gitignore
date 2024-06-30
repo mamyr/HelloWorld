@@ -5,6 +5,7 @@ out/
 .idea/
 target/
 gradle/
+build/
 .gradle/
 
 ### Eclipse ###
