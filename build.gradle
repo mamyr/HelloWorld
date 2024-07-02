@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+}
+
+group 'groupId'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+sourceSets {
+    main.java.srcDirs('src')
+}
+dependencies {
+    testImplementation "junit:junit:3.8.1"
+    implementation "com.fasterxml.jackson.core:jackson-core:2.17.1"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1"
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.1'
+    implementation "org.postgresql:postgresql:42.7.3"
+    // https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api
+    implementation 'jakarta.persistence:jakarta.persistence-api:3.2.0'
+    // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
+    implementation ('org.hibernate.orm:hibernate-core:6.5.2.Final')
+    {
+        exclude group: 'org.jboss.logging', module: 'jboss-logging';
+        exclude group: 'org.hibernate.common', module: 'hibernate-commons-annotations';
+    }
+    // https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-dbcp
+    implementation 'org.apache.tomcat:tomcat-dbcp:11.0.0-M21'
+    // https://mvnrepository.com/artifact/org.antlr/antlr4-runtime
+    // https://mvnrepository.com/artifact/cglib/cglib
+    // https://mvnrepository.com/artifact/org.ow2.asm/asm
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
+    // https://mvnrepository.com/artifact/commons-logging/commons-logging
+    // https://mvnrepository.com/artifact/javax.transaction/jta
+    // https://mvnrepository.com/artifact/org.dom4j/dom4j
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    // https://mvnrepository.com/artifact/org.jboss.logging/jboss-logging
+    implementation 'org.jboss.logging:jboss-logging:3.6.0.Final'
+    // https://mvnrepository.com/artifact/org.hibernate.javax.persistence/hibernate-jpa-2.1-api
+    implementation 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2'
+    // https://mvnrepository.com/artifact/org.hibernate.common/hibernate-commons-annotations
+    implementation 'org.hibernate.common:hibernate-commons-annotations:6.0.6.Final'
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-nop
+    testImplementation 'org.slf4j:slf4j-nop:2.0.13'
+}
+
+test {
+    useJUnitPlatform()
+}
