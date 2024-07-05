@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @org.hibernate.annotations.NamedQueries({ @org.hibernate.annotations.NamedQuery(name = "Ticket_GetTicketById", query = "from Ticket where id = :id"),
-        @org.hibernate.annotations.NamedQuery(name = "Ticket_GetTicketByUserId", query = "from Ticket where User.id = :userId"),
+        @org.hibernate.annotations.NamedQuery(name = "Ticket_GetTicketByUserId", query = "from Ticket where User.id = 2"),
         @org.hibernate.annotations.NamedQuery(name = "Ticket_UpdateTicketTypeById", query = "Update Ticket set ticketType = :newTicketType where id = :id")})
 @Entity
 @Table(name = "public.ticket")

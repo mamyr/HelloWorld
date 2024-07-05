@@ -1,38 +1,55 @@
 package com.andersen.lesson9;
 
+import com.andersen.lesson9.DAO.TicketDao;
+import com.andersen.lesson9.DAO.UserDao;
 import com.andersen.lesson9.Models.Ticket;
 import com.andersen.lesson9.Models.TicketType;
 import com.andersen.lesson9.Models.User;
-import com.andersen.lesson9.Repositories.TicketRepository;
-import com.andersen.lesson9.Repositories.UserRepository;
+/*import com.andersen.lesson9.Repositories.TicketRepository;
+import com.andersen.lesson9.Repositories.UserRepository;*/
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.boot.Metadata;
+/*import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;*/
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.orm.hibernate3.HibernateTemplate;
+
 import java.util.logging.Logger;
 import java.util.ArrayList;
 
 public class MappingApplication { //implements CommandLineRunner {
-    private static TicketRepository ticketRepository;
+   /* private static TicketRepository ticketRepository;
     private static UserRepository userRepository;
-
+*/
     private static final Logger logger = Logger.getLogger(String.valueOf(MappingApplication.class));
 
     private static SessionFactory sessionFactory;
 
     public static void main(String[] args) {
-            //Create typesafe ServiceRegistry object
-            StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
+
+        Resource r=new ClassPathResource("applicationContext.xml");
+        BeanFactory factory=new XmlBeanFactory(r);
+
+        UserDao userDao=new UserDao();
+        userDao.setTemplate((HibernateTemplate) factory.getBean("template"));
+        TicketDao ticketDao=new TicketDao();
+        ticketDao.setTemplate((HibernateTemplate) factory.getBean("template"));
+
+        //Create typesafe ServiceRegistry object
+     /*       StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
             Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();
             sessionFactory = meta.getSessionFactoryBuilder().build();
 
             userRepository = new UserRepository(sessionFactory);
             ticketRepository = new TicketRepository(sessionFactory);
-
+*/
         Ticket ticket1 = new Ticket();
         Ticket ticket2 = new Ticket();
         Ticket ticket5 = new Ticket();
@@ -42,25 +59,25 @@ public class MappingApplication { //implements CommandLineRunner {
         user1.setName("Name1");
         try {
             //for user id=1 saving
-            user1 = userRepository.save(user1);
+            userDao.saveUser(user1);
 
             //for ticket id=1 saving
             ticket5.setTicketType(TicketType.DAY);
-            User userSet = userRepository.getUserById(1);
+            User userSet = userDao.getById(1);
             ticket5.setUser(userSet);
             try {
-                ticket5 = ticketRepository.save(ticket5);
+                ticketDao.saveTicket(ticket5);
 
                 if(ticket5!=null) {
                     ticket5.setTicketType(TicketType.WEEK);
-                    ticketRepository.updateTicketType(ticket5);
+                    ticketDao.updateTicket(ticket5);
                 }
             } catch (Exception e) {
                 logger.info(e.getMessage());
             }
 
             //get user with id=1
-            User user3 = userRepository.getUserById(1);
+            User user3 = userDao.getById(1);
             builder1 = new StringBuilder();
             logger.info(builder1.append("User with id 1 is: ").append(user3==null?" Not found.":user3.toString()).toString());
 
@@ -69,7 +86,7 @@ public class MappingApplication { //implements CommandLineRunner {
             user2.setId(1);
             user2.setName("Name2");
             try {
-                user2 = userRepository.save(user2);
+                userDao.saveUser(user2);
             } catch (Exception e) {
                 logger.info(e.getMessage());
             }
@@ -78,10 +95,10 @@ public class MappingApplication { //implements CommandLineRunner {
             Ticket ticket3 = new Ticket();
             ticket3.setId(1);
             ticket3.setTicketType(TicketType.WEEK);
-            User userSet2 = userRepository.getUserById(2);
+            User userSet2 = userDao.getById(2);
             ticket3.setUser(userSet2);
             try {
-                ticket3 = ticketRepository.save(ticket3);
+                ticketDao.saveTicket(ticket3);
             } catch (Exception e) {
                 logger.info(e.getMessage());
             }
@@ -93,35 +110,35 @@ public class MappingApplication { //implements CommandLineRunner {
         user5.setName("Name5");
         try {
             //for user id=2 saving
-            user5 = userRepository.save(user5);
+            userDao.saveUser(user5);
 
             //for ticket saving with user_id=2
             ticket1.setTicketType(TicketType.MONTH);
-            User userSet3 = userRepository.getUserById(2);
+            User userSet3 = userDao.getById(2);
             ticket1.setUser(userSet3);
             try {
-                ticket1 = ticketRepository.save(ticket1);
+                ticketDao.saveTicket(ticket1);
             } catch (Exception e) {
                 logger.info(e.getMessage());
             }
 
             //for ticket saving with user_id=2
             ticket2.setTicketType(TicketType.DAY);
-            User userSet4 = userRepository.getUserById(2);
+            User userSet4 = userDao.getById(2);
             ticket2.setUser(userSet4);
             try {
-                ticket2 = ticketRepository.save(ticket2);
+                ticketDao.saveTicket(ticket2);
             } catch (Exception e) {
                 logger.info(e.getMessage());
             }
 
             //get ticket with id=2
-            Ticket ticket4 = ticketRepository.getTicketById(2);
+            Ticket ticket4 = ticketDao.getById(2);
             logger.info(builder1.append("Ticket with id 2 is: ").append(ticket4==null?" Not found.":ticket4.toString()).toString());
 
             //get ticket list with user_id=2
             ArrayList<Ticket> list = new ArrayList<Ticket>();
-            list = (ArrayList<Ticket>) ticketRepository.getTicketByUserId(2);
+            list = (ArrayList<Ticket>) ticketDao.getTicketsByUserId();//user_id=2;
             if(list!=null)
                 for(Ticket t:list){
                     builder1 = new StringBuilder();
@@ -130,10 +147,10 @@ public class MappingApplication { //implements CommandLineRunner {
 
             if(user5!=null) {
                 //delete user with id=2
-                userRepository.deleteUserById(user5.getId());
+                userDao.deleteUser(user5);
                 ArrayList<Ticket> list2 = new ArrayList<Ticket>();
                 //check if tickets with user_id=2 exists
-                list2 = (ArrayList<Ticket>) ticketRepository.getTicketByUserId(2);
+                list2 = (ArrayList<Ticket>) ticketDao.getTicketsByUserId();//user_id=2;
                 builder1 = new StringBuilder();
                 logger.info(builder1.append("Found tickets with userId 2 : ").append(list2==null?0:list2.size()).toString());
 
