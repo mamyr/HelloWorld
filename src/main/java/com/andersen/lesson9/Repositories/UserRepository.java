@@ -1,12 +1,12 @@
 package com.andersen.lesson9.Repositories;
 
-import com.andersen.lesson9.MappingApplication;
-import com.andersen.lesson9.Models.Ticket;
 import com.andersen.lesson9.Models.User;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.logging.Logger;
 
 public class UserRepository {
@@ -25,24 +25,27 @@ public class UserRepository {
 
     public User save(User user) {
         EntityTransaction newTransaction = null;
-        EntityManager em = sessionFactory.createEntityManager();
+        Session session = sessionFactory.openSession();
+        Transaction t = session.beginTransaction();
 
-        newTransaction = em.getTransaction();
+        /*EntityManager em = sessionFactory.createEntityManager();
+
+        newTransaction = em.getTransaction();*/
 
         try {
             if (user.getId() == null) {
-                em.persist(user);
-            } else {
+                session.save(user);  //em.persist(user);
+            } /*else {
                 em.merge(user);
-            }
+            }*/
         } catch (Exception ex) {
             logger.severe("Problem saving user entity <{}>"+user.getId());
             logger.severe(ex.getMessage());
-            newTransaction.rollback();
+            t.rollback();//newTransaction.rollback();
         } finally {
-            commitTransactionIfNeeded(newTransaction);
+            t.commit();//commitTransactionIfNeeded(newTransaction);
         }
-        em.flush();
+        //em.flush();
         logger.info("User is saved: {}"+user.getId());
         return user;
     }
@@ -56,19 +59,23 @@ public class UserRepository {
     }
 
     public User getUserById(Integer id){
-        EntityManager em = sessionFactory.createEntityManager();
-        TypedQuery<User> query = em.createQuery("From User Where id="+id.toString(), User.class);
+        //EntityManager em = sessionFactory.createEntityManager();
+        Session session = sessionFactory.openSession();
+        TypedQuery<User> query = session.createQuery("From User Where id="+id.toString(), User.class);
         return query.getSingleResult();
     }
 
+    @Transactional
     public void deleteUserById(Integer id) {
-        EntityManager em = sessionFactory.createEntityManager();
-        Query query = em.createQuery("DELETE FROM Ticket WHERE user_id="+id.toString());
+        //EntityManager em = sessionFactory.createEntityManager();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("DELETE FROM Ticket WHERE user.id="+id.toString());
         query.executeUpdate();
-        query = em.createQuery("DELETE FROM User WHERE id="+id.toString());
+        query = session.createQuery("DELETE FROM User WHERE id="+id.toString());
         query.executeUpdate();
     }
 
+    @Transactional
     public void updateTicketByUserIdAndUserId(User user, Integer id) {
         EntityManager em = sessionFactory.createEntityManager();
         Query query = em.createQuery("UPDATE User SET id="+id.toString()+" WHERE id="+user.getId().toString());
