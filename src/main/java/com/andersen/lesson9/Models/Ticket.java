@@ -1,6 +1,9 @@
 package com.andersen.lesson9.Models;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
 
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -9,17 +12,19 @@ import java.util.Objects;
         @org.hibernate.annotations.NamedQuery(name = "Ticket_GetTicketByUserId", query = "from Ticket where User.id = :userId"),
         @org.hibernate.annotations.NamedQuery(name = "Ticket_UpdateTicketTypeById", query = "Update Ticket set ticketType = :newTicketType where id = :id")})
 @Entity
-@Table(name = "public.ticket")
+@Table(name = "public.ticket", uniqueConstraints = {@UniqueConstraint(columnNames={"id"})})
 public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ticket_seq")
-    @SequenceGenerator(name = "ticket_seq", sequenceName="ticket_seq")
+    @SequenceGenerator(name = "ticket_seq", sequenceName="ticket_seq",
+            initialValue = 1, allocationSize = 1)
     private Integer id;
 
     // A model belongs to one user
     // Foreign key referencing the user table
     @ManyToOne
+    //@Cascade(value={CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id")
     private User user;
 

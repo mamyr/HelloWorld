@@ -10,7 +10,7 @@
         </meta>
 
         <id name = "id" type = "int" column = "id">
-            <generator class="native">
+            <generator class="increment">
                 <param name="sequence">ticket_seq</param>
             </generator>
         </id>

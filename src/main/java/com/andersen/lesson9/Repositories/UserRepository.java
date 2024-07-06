@@ -34,10 +34,10 @@ public class UserRepository {
 
         try {
             if (user.getId() == null) {
-                session.save(user);  //em.persist(user);
-            } /*else {
-                em.merge(user);
-            }*/
+                session.persist(user);  //em.persist(user);
+            } else {
+                session.merge(user);
+            }
         } catch (Exception ex) {
             logger.severe("Problem saving user entity <{}>"+user.getId());
             logger.severe(ex.getMessage());
@@ -47,6 +47,7 @@ public class UserRepository {
         }
         //em.flush();
         logger.info("User is saved: {}"+user.getId());
+        session.close();
         return user;
     }
 
@@ -69,19 +70,26 @@ public class UserRepository {
     public void deleteUserById(Integer id) {
         //EntityManager em = sessionFactory.createEntityManager();
         Session session = sessionFactory.openSession();
+        Transaction t = session.beginTransaction();
         Query query = session.createQuery("DELETE FROM Ticket WHERE user.id="+id.toString());
         query.executeUpdate();
         query = session.createQuery("DELETE FROM User WHERE id="+id.toString());
         query.executeUpdate();
+        t.commit();
+        session.close();
     }
 
     @Transactional
     public void updateTicketByUserIdAndUserId(User user, Integer id) {
-        EntityManager em = sessionFactory.createEntityManager();
-        Query query = em.createQuery("UPDATE User SET id="+id.toString()+" WHERE id="+user.getId().toString());
+        //EntityManager em = sessionFactory.createEntityManager();
+        Session session = sessionFactory.openSession();
+        Transaction t = session.beginTransaction();
+        Query query = session.createQuery("UPDATE User SET id="+id.toString()+" WHERE id="+user.getId().toString());
         query.executeUpdate();
-        query = em.createQuery("UPDATE Ticket SET user_id="+id.toString()+" WHERE user_id="+user.getId().toString());
+        query = session.createQuery("UPDATE Ticket SET user_id="+id.toString()+" WHERE user_id="+user.getId().toString());
         query.executeUpdate();
+        t.commit();
+        session.close();
     }
 
 }

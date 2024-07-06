@@ -45,7 +45,8 @@ public class TicketRepository {
             t.commit();//commitTransactionIfNeeded(newTransaction);
         }
         //em.flush();
-        logger.severe("Entity is saved: {}"+ticket.getId());
+        logger.info("Entity is saved: {}"+ticket.getId());
+        session.close();
         return ticket;
     }
 
@@ -77,7 +78,13 @@ public class TicketRepository {
     public void updateTicketType(Ticket ticket) {
         //EntityManager em = sessionFactory.createEntityManager();
         Session session = sessionFactory.openSession();
+        Transaction t = session.beginTransaction();
+
+        logger.info("Updating ticket = "+ticket.getId());
         session.update(ticket);
+
+        t.commit();
+        session.close();
 /*        Query query = em.createQuery("UPDATE Ticket SET ticket_type="+ticket.getTicketType().toString()+" WHERE id="+ticket.getId().toString());
         query.executeUpdate();*/
     }

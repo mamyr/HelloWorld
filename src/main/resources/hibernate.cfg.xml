@@ -14,6 +14,7 @@
         <property name="hbm2ddl.auto">update</property>
         <property name="current_session_context_class">thread</property>
         <property name="hibernate.id.new_generator_mappings">true</property>
+        <property name="hibernate.connection.autocommit">true</property>
         <!-- We need to specify which hbm file we are going to use here -->
         <mapping resource="user.hbm.xml" />
         <mapping resource="ticket.hbm.xml" />

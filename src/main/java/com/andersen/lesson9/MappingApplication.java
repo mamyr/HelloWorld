@@ -13,6 +13,10 @@ import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.ArrayList;
 
@@ -48,15 +52,20 @@ public class MappingApplication { //implements CommandLineRunner {
             ticket5.setTicketType(TicketType.DAY);
             User userSet = userRepository.getUserById(1);
             ticket5.setUser(userSet);
+            user1.setTicketList(Set.of(ticket5));
             try {
                 ticket5 = ticketRepository.save(ticket5);
-
-                if(ticket5!=null) {
-                    ticket5.setTicketType(TicketType.WEEK);
-                    ticketRepository.updateTicketType(ticket5);
-                }
+                user1 = userRepository.save(user1);
             } catch (Exception e) {
-                logger.info(e.getMessage());
+                logger.severe(e.getMessage());
+            }
+            if(ticket5!=null) {
+                ticket5.setTicketType(TicketType.WEEK);
+                try {
+                    ticketRepository.updateTicketType(ticket5);
+                } catch (Exception ex) {
+                    logger.severe(ex.getMessage());
+                }
             }
 
             //get user with id=1
@@ -71,22 +80,22 @@ public class MappingApplication { //implements CommandLineRunner {
             try {
                 user2 = userRepository.save(user2);
             } catch (Exception e) {
-                logger.info(e.getMessage());
+                logger.severe(e.getMessage());
             }
 
             //for ticket id=1 duplicate key error throwing
             Ticket ticket3 = new Ticket();
             ticket3.setId(1);
             ticket3.setTicketType(TicketType.WEEK);
-            User userSet2 = userRepository.getUserById(2);
+            User userSet2 = userRepository.getUserById(1);
             ticket3.setUser(userSet2);
             try {
                 ticket3 = ticketRepository.save(ticket3);
             } catch (Exception e) {
-                logger.info(e.getMessage());
+                logger.severe(e.getMessage());
             }
         } catch (Exception e) {
-            logger.info(e.getMessage());
+            logger.severe(e.getMessage());
         }
 
         User user5 = new User();
@@ -102,7 +111,7 @@ public class MappingApplication { //implements CommandLineRunner {
             try {
                 ticket1 = ticketRepository.save(ticket1);
             } catch (Exception e) {
-                logger.info(e.getMessage());
+                logger.severe(e.getMessage());
             }
 
             //for ticket saving with user_id=2
@@ -112,7 +121,7 @@ public class MappingApplication { //implements CommandLineRunner {
             try {
                 ticket2 = ticketRepository.save(ticket2);
             } catch (Exception e) {
-                logger.info(e.getMessage());
+                logger.severe(e.getMessage());
             }
 
             //get ticket with id=2
@@ -143,8 +152,12 @@ public class MappingApplication { //implements CommandLineRunner {
                         logger.info(builder1.append("In the list found not deleted ticket with id: ").append(t.getId()).toString());
                     }
             }
+
+            user1.setName("Name2");
+            ticket5.setTicketType(TicketType.MONTH);
+            updateUserByIdAndTicketByUserId(user1);
         } catch (Exception e) {
-            logger.info(e.getMessage());
+            logger.severe(e.getMessage());
         }
 
     }
@@ -167,7 +180,7 @@ public class MappingApplication { //implements CommandLineRunner {
         catch (HibernateException e) {
             if (tx != null)
                 tx.rollback();
-            logger.info(e.getMessage());
+            logger.severe(e.getMessage());
         }
         finally {
             session.close();
@@ -176,7 +189,7 @@ public class MappingApplication { //implements CommandLineRunner {
     }
 
     /* Method to CREATE a ticket in the database */
-    public Integer addTicket(Integer userId, TicketType type)
+    public static Integer addTicket(Integer userId, TicketType type)
     {
         Session session = sessionFactory.openSession();
         Transaction tx = null;
@@ -194,7 +207,7 @@ public class MappingApplication { //implements CommandLineRunner {
         catch (HibernateException e) {
             if (tx != null)
                 tx.rollback();
-            logger.info(e.getMessage());
+            logger.severe(e.getMessage());
         }
         finally {
             session.close();
@@ -202,144 +215,23 @@ public class MappingApplication { //implements CommandLineRunner {
         return ticketID;
     }
 
-    /* Method to CREATE a ticket in the database */
-    public void deleteUserByIdAndTicketByUserId(User user)
+    public static void updateUserByIdAndTicketByUserId(User user)
     {
         Session session = sessionFactory.openSession();
         Transaction tx = null;
 
         try {
             tx = session.beginTransaction();
-            session.delete(session.load(user.getClass(), user.getId()));;
+            session.merge(user);
             tx.commit();
         }
         catch (HibernateException e) {
             if (tx != null)
                 tx.rollback();
-            logger.info(e.getMessage());
+            logger.severe(e.getMessage());
         }
         finally {
             session.close();
         }
     }
-    /*    public static void main(String[] args) {
-        SpringApplication.run(MappingApplication.class, args);
-    }
-
-    @Override
-    public void run(String... args) throws Exception {
-        Ticket ticket1 = new Ticket();
-        Ticket ticket2 = new Ticket();
-        Ticket ticket5 = new Ticket();
-        StringBuilder builder1 = new StringBuilder();
-
-        User user1 = new User();
-        user1.setName("Name1");
-        try {
-            //for user id=1 saving
-            user1 = userRepository.save(user1);
-
-            //for ticket id=1 saving
-            ticket5.setTicketType(Ticket.TicketType.DAY);
-            User userSet = userRepository.getUserById(1L);
-            ticket5.setUser(userSet);
-            try {
-                ticket5 = ticketRepository.save(ticket5);
-
-                if(ticket5!=null) {
-                    ticket5.setTicketType(Ticket.TicketType.WEEK);
-                    ticketRepository.updateTicketType(ticket5);
-                }
-            } catch (Exception e) {
-                logger.info(e.getMessage());
-            }
-
-            //get user with id=1
-            User user3 = userRepository.getUserById(1L);
-            builder1 = new StringBuilder();
-            logger.info(builder1.append("User with id 1 is: ").append(user3==null?" Not found.":user3.toString()).toString());
-
-            //for user id=1 duplicate key error throwing
-            User user2 = new User();
-            user2.setId(1L);
-            user2.setName("Name2");
-            try {
-                user2 = userRepository.save(user2);
-            } catch (Exception e) {
-                logger.info(e.getMessage());
-            }
-
-            //for ticket id=1 duplicate key error throwing
-            Ticket ticket3 = new Ticket();
-            ticket3.setId(1L);
-            ticket3.setTicketType(Ticket.TicketType.WEEK);
-            User userSet2 = userRepository.getUserById(2L);
-            ticket3.setUser(userSet2);
-            try {
-                ticket3 = ticketRepository.save(ticket3);
-            } catch (Exception e) {
-                logger.info(e.getMessage());
-            }
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-        }
-
-        User user5 = new User();
-        user5.setName("Name5");
-        try {
-            //for user id=2 saving
-            user5 = userRepository.save(user5);
-
-            //for ticket saving with user_id=2
-            ticket1.setTicketType(Ticket.TicketType.MONTH);
-            User userSet3 = userRepository.getUserById(2L);
-            ticket1.setUser(userSet3);
-            try {
-                ticket1 = ticketRepository.save(ticket1);
-            } catch (Exception e) {
-                logger.info(e.getMessage());
-            }
-
-            //for ticket saving with user_id=2
-            ticket2.setTicketType(Ticket.TicketType.DAY);
-            User userSet4 = userRepository.getUserById(2L);
-            ticket2.setUser(userSet4);
-            try {
-                ticket2 = ticketRepository.save(ticket2);
-            } catch (Exception e) {
-                logger.info(e.getMessage());
-            }
-
-            //get ticket with id=2
-            Ticket ticket4 = ticketRepository.getTicketById(2L);
-            logger.info(builder1.append("Ticket with id 2 is: ").append(ticket4==null?" Not found.":ticket4.toString()).toString());
-
-            //get ticket list with user_id=2
-            ArrayList<Ticket> list = new ArrayList<Ticket>();
-            list = (ArrayList<Ticket>) ticketRepository.getTicketByUserId(2L);
-            if(list!=null)
-                for(Ticket t:list){
-                    builder1 = new StringBuilder();
-                    logger.info(builder1.append("In the list found ticket with id: ").append(t.getId()).toString());
-                }
-
-            if(user5!=null) {
-                //delete user with id=2
-                userRepository.deleteUserById(user5.getId());
-                ArrayList<Ticket> list2 = new ArrayList<Ticket>();
-                //check if tickets with user_id=2 exists
-                list2 = (ArrayList<Ticket>) ticketRepository.getTicketByUserId(2L);
-                builder1 = new StringBuilder();
-                logger.info(builder1.append("Found tickets with userId 2 : ").append(list2==null?0:list2.size()).toString());
-
-                if(list2!=null)
-                    for (Ticket t : list2) {
-                        builder1 = new StringBuilder();
-                        logger.info(builder1.append("In the list found not deleted ticket with id: ").append(t.getId()).toString());
-                    }
-            }
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-        }
-    }*/
 }
