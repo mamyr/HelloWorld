@@ -10,13 +10,18 @@
         </meta>
 
         <id name = "id" type = "int" column = "id">
-            <generator class="native">
+            <generator class="increment">
                 <param name="sequence">user_seq</param>
             </generator>
         </id>
 
         <property name = "name" column = "name" type = "string"/>
         <property name = "creationDate" column = "creation_date" type = "timestamp"/>
-
+        <set name="ticketList" table="ticket" inverse="true" cascade="all" lazy="true" fetch="select">
+            <key>
+                <column name="user_id" not-null="true" />
+            </key>
+            <one-to-many class="com.andersen.lesson9.Models.Ticket" />
+        </set>
     </class>
 </hibernate-mapping>
