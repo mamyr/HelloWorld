@@ -14,17 +14,15 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.ArrayList;
 
-public class MappingApplication { //implements CommandLineRunner {
+public class MappingApplicationHibernate { //implements CommandLineRunner {
     private static TicketRepository ticketRepository;
     private static UserRepository userRepository;
 
-    private static final Logger logger = Logger.getLogger(String.valueOf(MappingApplication.class));
+    private static final Logger logger = Logger.getLogger(String.valueOf(MappingApplicationHibernate.class));
 
     private static SessionFactory sessionFactory;
 
