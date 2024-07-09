@@ -2,7 +2,6 @@ package com.andersen.lesson9.Repositories;
 
 import com.andersen.lesson9.Models.Ticket;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -62,7 +61,7 @@ public class TicketRepository {
 //        EntityManager em = sessionFactory.createEntityManager();
         Session session = sessionFactory.openSession();
 
-        TypedQuery<Ticket> query = session.createQuery("From Ticket Where id="+id.toString(), Ticket.class);
+        TypedQuery<Ticket> query = (TypedQuery<Ticket>) session.createQuery("From Ticket Where id="+id.toString());
         return query.getSingleResult();
     }
 
@@ -70,11 +69,10 @@ public class TicketRepository {
         //EntityManager em = sessionFactory.createEntityManager();
         Session session = sessionFactory.openSession();
 
-        TypedQuery<Ticket> query = session.createQuery("From Ticket Where user.id="+id.toString(), Ticket.class);
+        TypedQuery<Ticket> query = (TypedQuery<Ticket>) session.createQuery("From Ticket Where user.id="+id.toString());
         return query.getResultList();
     }
 
-    @Transactional
     public void updateTicketType(Ticket ticket) {
         //EntityManager em = sessionFactory.createEntityManager();
         Session session = sessionFactory.openSession();

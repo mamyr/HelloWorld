@@ -1,6 +1,7 @@
 package com.andersen.lesson9.Models;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.CascadeType;
@@ -32,6 +33,13 @@ public class Ticket {
     @Column(name="ticket_type")
     private TicketType ticketType;
     private Timestamp creationDate;
+
+    public static Ticket from(User user, TicketType ticket_type) {
+        Ticket ticket = new Ticket();
+        ticket.setTicketType(ticket_type);
+        ticket.setUser(user);
+        return ticket;
+    }
 
     public void setId(Integer id){
         this.id = id;

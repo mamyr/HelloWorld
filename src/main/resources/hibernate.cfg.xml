@@ -15,7 +15,7 @@
         <property name="current_session_context_class">thread</property>
         <property name="hibernate.id.new_generator_mappings">true</property>
         <property name="hibernate.connection.autocommit">true</property>
-        <!-- We need to specify which hbm file we are going to use here -->
+        <!-- We need to specify which hbm file we are going to use here For lesson 9-->
         <mapping resource="user.hbm.xml" />
         <mapping resource="ticket.hbm.xml" />
     </session-factory>
