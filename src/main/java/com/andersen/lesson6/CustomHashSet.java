@@ -67,7 +67,7 @@ public class CustomHashSet<E> {
             y++;
             x++;
         }
-        y++;//y=i+1;
+        y++;
         while(y<=this.size-1){
             newList.set(x,this.array[y]);
             y++;
