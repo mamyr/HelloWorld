@@ -87,7 +87,7 @@ public class App
                     .append(mostPopularViolation(countValidTicketTypes, countValidStartDate, countValidPrice, x)).toString());
 
         } catch (Exception ignored){
-            System.out.println(ignored.getMessage());
+            logger.severe(ignored.getMessage());
         }
     }
 
@@ -113,7 +113,6 @@ public class App
             }
         }
         catch(IOException ex){
-
             logger.severe(ex.getMessage());
         }
         return data;
