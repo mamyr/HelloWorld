@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.jooq.JooqAutoConfiguration;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
 import org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration;
 
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.ArrayList;
 
@@ -24,6 +25,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -40,6 +42,8 @@ public class MappingApplicationSpring implements CommandLineRunner {
     private static UserDaoImpl userDao;
     private static final Logger logger = Logger.getLogger(String.valueOf(MappingApplicationSpring.class));
 
+    private static Resource dataFile;
+
     @Override
     public void run(String... args) throws Exception {
     }
@@ -54,6 +58,43 @@ public class MappingApplicationSpring implements CommandLineRunner {
         userDao = (UserDaoImpl) ctx.getBean("userDao");
         ticketDao = (TicketDaoImpl) ctx.getBean("ticketDao");
         daoCode();
+
+        dataFile = ctx.getResource("classpath:data.txt");
+        ArrayList<String> list = stream();
+    }
+
+    @PostConstruct
+    private static ArrayList<String> stream(){
+        StringBuilder builderS = new StringBuilder();
+        ArrayList<String> data = new ArrayList<String>();
+        try
+        {
+            byte[] dataContentByte = dataFile.getContentAsByteArray();
+            byte[][] dataEachRow = new byte[17][84];
+            int j = 0, row = 0, lastByte = 84;
+            for(int i=0; i<dataContentByte.length; i++,j++){
+                if(j==lastByte){
+                    data.add(builderS.toString());
+                    logger.info(builderS.toString());
+                    j = 0;
+                    row++;
+                    if(row==16) lastByte=82;
+                    builderS = new StringBuilder();
+                }
+                dataEachRow[row][j] = dataContentByte[i];
+
+                char c = (char) dataContentByte[i];
+                builderS.append(c);
+            }
+            data.add(builderS.toString());
+            logger.info(builderS.toString());
+
+            //the content of file is corrected to have 82 chars at each line so the buffer is 84 bytes
+        }
+        catch(Exception ex){
+            logger.severe(ex.getMessage());
+        }
+        return data;
     }
 
     @PostConstruct
@@ -91,7 +132,7 @@ public class MappingApplicationSpring implements CommandLineRunner {
             builder1 = new StringBuilder();
             logger.info(builder1.append("User with id 1 is: ").append(user3==null?" Not found.":user3.toString()).toString());
 
-            //for user id=1 duplicate key error throwing
+            //for user id=1 duplicate key error not throwing, merging
             User user2 = new User();
             user2.setId(1);
             user2.setName("Name2");
@@ -101,7 +142,7 @@ public class MappingApplicationSpring implements CommandLineRunner {
                 logger.info(e.getMessage());
             }
 
-            //for ticket id=1 duplicate key error throwing
+            //for ticket id=1 duplicate key error not throwing, merging
             Ticket ticket3 = new Ticket();
             ticket3.setId(1);
             ticket3.setTicketType(TicketType.WEEK);
@@ -175,6 +216,21 @@ public class MappingApplicationSpring implements CommandLineRunner {
                         logger.info(builder1.append("In the list found not deleted ticket with id: ").append(t.getId()).toString());
                     }
             }
+
+            // change user name to NameUpdate and create a new Ticket)
+            User userSetUpdate = userDao.getById(1);
+            userSetUpdate.setName("NameUpdate");
+
+            Ticket tNew = new Ticket();
+            tNew.setUser(userSetUpdate);
+            tNew.setTicketType(TicketType.MONTH);
+
+            Set<Ticket> userSetUpdateTicketList = userSetUpdate.getTicketList();
+            userSetUpdateTicketList.add(tNew);
+            userSetUpdate.setTicketList(userSetUpdateTicketList);
+
+            userDao.save(userSetUpdate);
+
         } catch (Exception e) {
             logger.info(e.getMessage());
         }
