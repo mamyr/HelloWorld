@@ -27,24 +27,19 @@ public class UserRepository {
         Session session = sessionFactory.openSession();
         Transaction t = session.beginTransaction();
 
-        /*EntityManager em = sessionFactory.createEntityManager();
-
-        newTransaction = em.getTransaction();*/
-
         try {
             if (user.getId() == null) {
-                session.persist(user);  //em.persist(user);
+                session.persist(user);
             } else {
                 session.merge(user);
             }
         } catch (Exception ex) {
             logger.severe("Problem saving user entity <{}>"+user.getId());
             logger.severe(ex.getMessage());
-            t.rollback();//newTransaction.rollback();
+            t.rollback();
         } finally {
-            t.commit();//commitTransactionIfNeeded(newTransaction);
+            t.commit();
         }
-        //em.flush();
         logger.info("User is saved: {}"+user.getId());
         session.close();
         return user;
@@ -59,14 +54,12 @@ public class UserRepository {
     }
 
     public User getUserById(Integer id){
-        //EntityManager em = sessionFactory.createEntityManager();
         Session session = sessionFactory.openSession();
         TypedQuery<User> query = (TypedQuery<User>) session.createQuery("From User Where id="+id.toString());
         return query.getSingleResult();
     }
 
     public void deleteUserById(Integer id) {
-        //EntityManager em = sessionFactory.createEntityManager();
         Session session = sessionFactory.openSession();
         Transaction t = session.beginTransaction();
         Query query = (Query) session.createQuery("DELETE FROM Ticket WHERE user.id="+id.toString());
@@ -78,7 +71,6 @@ public class UserRepository {
     }
 
     public void updateTicketByUserIdAndUserId(User user, Integer id) {
-        //EntityManager em = sessionFactory.createEntityManager();
         Session session = sessionFactory.openSession();
         Transaction t = session.beginTransaction();
         Query query = (Query) session.createQuery("UPDATE User SET id="+id.toString()+" WHERE id="+user.getId().toString());

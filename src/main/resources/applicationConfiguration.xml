@@ -11,10 +11,6 @@
                            http://www.springframework.org/schema/tx
                            http://www.springframework.org/schema/tx/spring-tx.xsd">
     <context:annotation-config/>
-    <bean class="org.springframework.orm.hibernate5.HibernateTransactionManager" id="transactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
     <tx:annotation-driven/>
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName"  value="org.postgresql.Driver"></property>
@@ -22,13 +18,14 @@
         <property name="username" value="postgres"></property>
         <property name="password" value="postgres"></property>
     </bean>
+
     <bean id="sessionFactory"  class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"></property>
 
         <property name="mappingResources">
             <list>
-                <value>user.hbm.xml</value>
-                <value>ticket.hbm.xml</value>
+                <value>user.orm.xml</value>
+                <value>ticket.orm.xml</value>
             </list>
         </property>
         <property name="packagesToScan">
@@ -55,11 +52,11 @@
             </props>
         </property>
     </bean>
-    <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="emf">
+
+    <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
         <property name="packagesToScan" value="com.andersen.lesson9.Models, com.andersen.lesson10.services" />
         <property name="dataSource" ref="dataSource" />
-        <property name="jpaVendorAdapter" ref="jpaVendorAdapter"/>
-        <property name="persistenceUnitName" value="stadto"/>
+        <property name="persistenceUnitName" value="entityManagerFactoryUnit"/>
         <property name="jpaProperties">
             <props>
                 <prop key="hibernate.show_sql">true</prop>
@@ -74,11 +71,11 @@
         <property name="databasePlatform" value="org.hibernate.dialect.PostgreSQLDialect"/>
     </bean>
 
-    <bean id="d1" class="com.andersen.lesson10.services.UserDao" init-method="initializeBean" destroy-method="destroyBean">
-        <property name="sessionFactory" ref="sessionFactory"></property>
+    <bean id="userDao" class="com.andersen.lesson10.services.UserDaoImpl">
+        <property name="emf" ref="sessionFactory"></property>
     </bean>
-    <bean id="d2" class="com.andersen.lesson10.services.TicketDao" init-method="initializeBean" destroy-method="destroyBean">
-        <property name="sessionFactory" ref="sessionFactory"></property>
+    <bean id="ticketDao" class="com.andersen.lesson10.services.TicketDaoImpl">
+        <property name="emf" ref="sessionFactory"></property>
     </bean>
 
 </beans>

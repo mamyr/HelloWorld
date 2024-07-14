@@ -3,13 +3,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
-
     <groupId>groupId</groupId>
     <artifactId>HelloWorld</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -22,6 +15,13 @@
         <spring-boot.version>5.0.0.RELEASE</spring-boot.version>
     </properties>
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-parent</artifactId>
+            <version>3.3.1</version>
+            <type>pom</type>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -43,12 +43,6 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.3</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api -->
-        <dependency>
-            <groupId>jakarta.persistence</groupId>
-            <artifactId>jakarta.persistence-api</artifactId>
-            <version>3.2.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
         <dependency>
@@ -74,66 +68,11 @@
             <artifactId>tomcat-dbcp</artifactId>
             <version>11.0.0-M21</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.antlr/antlr4-runtime -->
-        <!--dependency>
-            <groupId>org.antlr</groupId>
-            <artifactId>antlr4-runtime</artifactId>
-            <version>4.13.1</version>
-        </dependency-->
-        <!-- https://mvnrepository.com/artifact/cglib/cglib -->
-        <!--dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>3.3.0</version>
-        </dependency-->
-        <!-- https://mvnrepository.com/artifact/org.ow2.asm/asm -->
-        <!--dependency>
-            <groupId>org.ow2.asm</groupId>
-            <artifactId>asm</artifactId>
-            <version>9.7</version>
-        </dependency-->
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
-        <!--dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
-            <version>4.4</version>
-        </dependency-->
-        <!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
-        <!--dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>1.3.3</version>
-        </dependency-->
-        <!-- https://mvnrepository.com/artifact/javax.transaction/jta -->
-        <!-- https://mvnrepository.com/artifact/jakarta.transaction/jakarta.transaction-api -->
-        <!--dependency>
-            <groupId>jakarta.transaction</groupId>
-            <artifactId>jakarta.transaction-api</artifactId>
-            <version>2.0.1</version>
-        </dependency-->
-        <!-- https://mvnrepository.com/artifact/org.dom4j/dom4j -->
-        <!--dependency>
-            <groupId>org.dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-            <version>2.1.4</version>
-        </dependency-->
-        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-        <!--dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.23.1</version>
-        </dependency-->
         <!-- https://mvnrepository.com/artifact/org.jboss.logging/jboss-logging -->
         <dependency>
             <groupId>org.jboss.logging</groupId>
             <artifactId>jboss-logging</artifactId>
             <version>3.6.0.Final</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.hibernate.javax.persistence/hibernate-jpa-2.1-api -->
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>1.0.2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.hibernate.common/hibernate-commons-annotations -->
         <dependency>
@@ -142,23 +81,47 @@
             <version>6.0.6.Final</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter -->
-        <!--dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-            <version>3.3.1</version>
-        </dependency-->
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>3.0.0</version>
+            <version>3.3.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>8.0.1.Final</version>
         </dependency>
         <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>1.2.2</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>3.3.1</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-jooq -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jooq</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>10.0.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-database-postgresql -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+            <version>10.0.0</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 </project>

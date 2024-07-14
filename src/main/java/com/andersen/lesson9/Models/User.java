@@ -2,7 +2,6 @@ package com.andersen.lesson9.Models;
 
 import jakarta.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -18,11 +17,12 @@ public class User {
             initialValue = 1, allocationSize = 1)
     private Integer id;
     private String name;
+    @Column(name="creation_date")
     private Timestamp creationDate;
 
     // A user can have many tickets
     @OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
-    @JoinColumn(name="user_id")
+    //@JoinColumn(name="user_id")
     private Set<Ticket> ticketList;
 
     public  void setTicketList(Set<Ticket> ticketList){
