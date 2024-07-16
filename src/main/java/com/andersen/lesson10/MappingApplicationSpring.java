@@ -1,5 +1,7 @@
 package com.andersen.lesson10;
 
+import com.andersen.lesson10.controllers.TicketController;
+import com.andersen.lesson10.services.NotificationSenderImpl;
 import com.andersen.lesson10.services.TicketDaoImpl;
 import com.andersen.lesson10.services.UserDaoImpl;
 import com.andersen.lesson9.Models.Ticket;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -29,20 +32,26 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@ComponentScan(basePackages = {"com.andersen.lesson10.services.*, com.andersen.lesson9.Models.*"})
+@ComponentScan(basePackages = {"com.andersen.lesson10.controllers.*, com.andersen.lesson10.services.*, com.andersen.lesson9.Models.*"})
 @EnableJpaRepositories(basePackages = "com.andersen.lesson10.services.*")
 @EntityScan("com.andersen.lesson9.Models.*")
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, LiquibaseAutoConfiguration.class, JooqAutoConfiguration.class, R2dbcAutoConfiguration.class})
-@Import({ HibernateConf.class})
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, LiquibaseAutoConfiguration.class, JooqAutoConfiguration.class, R2dbcAutoConfiguration.class, UserDetailsServiceAutoConfiguration.class})
+@Import({ HibernateConf.class, MvcConfig.class, WebSecurityConfig.class})
 @EnableTransactionManagement
 public class MappingApplicationSpring implements CommandLineRunner {
     @Autowired
     private static TicketDaoImpl ticketDao;
     @Autowired
     private static UserDaoImpl userDao;
+    @Autowired
+    private static TicketController ticketController;
+
     private static final Logger logger = Logger.getLogger(String.valueOf(MappingApplicationSpring.class));
 
     private static Resource dataFile;
+
+    @Autowired
+    private static NotificationSenderImpl notify;
 
     @Override
     public void run(String... args) throws Exception {
@@ -54,13 +63,20 @@ public class MappingApplicationSpring implements CommandLineRunner {
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext(HibernateConf.class);
         Environment env = ctx.getEnvironment();
+        logger.info(env.getProperty("notification.service"));
 
         userDao = (UserDaoImpl) ctx.getBean("userDao");
         ticketDao = (TicketDaoImpl) ctx.getBean("ticketDao");
+        ticketController = (TicketController) ctx.getBean("ticketController");
+
         daoCode();
 
         dataFile = ctx.getResource("classpath:data.txt");
         ArrayList<String> list = stream();
+
+        notify = (NotificationSenderImpl) ctx.getBean("ThisIsMyFirstConditionalBean");
+        logger.info(notify.send("Message"));
+
     }
 
     @PostConstruct

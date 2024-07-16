@@ -1,0 +1,25 @@
+<http auto-config="true" access-denied-page="/denied">
+    <intercept-url pattern="/role1/*" access="ROLE1" />
+    <intercept-url pattern="/role2/*" access="ROLE2" />
+    <intercept-url pattern="/hello" access="USER" />
+    <intercept-url pattern="/api/tickets/**" access="USER" />
+    <intercept-url pattern="/home" access="ROLE1,ROLE2,USER"/>
+    <intercept-url pattern="/api/tickets" access="ROLE1,ROLE2,USER"/>
+    <form-login login-page="/login" default-target-url="/home"
+                authentication-failure-url="/login" />
+    <logout
+            invalidate-session="true"
+            delete-cookies="SPRING_SECURITY_REMEMBER_ME_COOKIE"
+            logout-success-url="/login"></logout>
+</http>
+<beans:bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>
+<authentication-manager >
+    <authentication-provider ref="authProvider"></authentication-provider>
+</authentication-manager>
+<beans:bean id="userDetailsServiceImpl" class="org.springframework.security.core.userdetails.UserDetailsService"/>
+<beans:bean id="authProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+    <beans:property name="userDetailsService" ref="userDetailsServiceImpl" />
+    <beans:property name="passwordEncoder" ref="encoder" />
+</beans:bean>
+<!-- For hashing and salting user passwords -->
+<beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>

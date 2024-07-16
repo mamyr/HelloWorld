@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title>Tickets</title>
+</head>
+<body>
+<h1 th:inline="text">Hello <span th:remove="tag" sec:authentication="name">thymeleaf</span>!
+    <span th:text="${remoteUser}"></span></h1>
+
+a TICKET
+<table>
+    <thead>
+    <tr>
+        <th> object</th>
+        <th> id</th>
+        <!--th> user_id </th-->
+        <th> ticket_type </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr >
+        <td><span th:object="${ticket}"></span></td>
+        <td><span th:text="${ticket.id}"></span></td>
+        <td><span th:text="${ticket.ticketType}"></span></td>
+        <!--td><input th:field="*{tickets[__${itemStat.index}__].user_id}" /></td>
+        <td><input th:field="*{tickets[__${itemStat.index}__].ticket_type}" /></td-->
+    </tr>
+    </tbody>
+</table>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
+</body>
+</html>
