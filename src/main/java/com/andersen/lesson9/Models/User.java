@@ -3,6 +3,10 @@ package com.andersen.lesson9.Models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Set;
@@ -10,6 +14,9 @@ import java.util.Set;
 @org.hibernate.annotations.NamedQueries({ @org.hibernate.annotations.NamedQuery(name = "User_GetUserById", query = "from User where id = :id"),
         @org.hibernate.annotations.NamedQuery(name = "User_UpdateUserById", query = "Update User set id = :newId where id = :id")})//,
 //        @org.hibernate.annotations.NamedNativeQuery(name = "DeptEmployee_UpdateEmployeeDesignation", query = "call UPDATE_EMPLOYEE_DESIGNATION(:employeeNumber, :newDesignation)", resultClass = DeptEmployee.class) })
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 @Entity
 @Table(name = "public.user", uniqueConstraints = {@UniqueConstraint(columnNames={"id"})})
 public class User {

@@ -37,8 +37,14 @@ public class TicketController {
     public ModelAndView getTicketById(@PathVariable int id){
         ModelAndView mav = new ModelAndView("ticket");
         Ticket t = ticketDao.getById(id);
-        logger.info("t123456789 = "+t.toString());
-        mav.addObject("ticket", t);
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+            String ticketsAsString = objectMapper.writeValueAsString(ticketDao.getById(id));
+            logger.info("t123456789 = "+t.toString());
+            mav.addObject("ticket", ticketsAsString);
+        } catch (Exception exception){
+            logger.severe(exception.getMessage());
+        }
         return mav;
     }
 

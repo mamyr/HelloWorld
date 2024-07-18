@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -12,6 +15,9 @@ import java.util.Objects;
 @org.hibernate.annotations.NamedQueries({ @org.hibernate.annotations.NamedQuery(name = "Ticket_GetTicketById", query = "from Ticket where id = :id"),
         @org.hibernate.annotations.NamedQuery(name = "Ticket_GetTicketByUserId", query = "from Ticket t, User u where u.id = :userId and u=t.user"),
         @org.hibernate.annotations.NamedQuery(name = "Ticket_UpdateTicketTypeById", query = "Update Ticket set ticketType = :newTicketType where id = :id")})
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 @Entity
 @Table(name = "public.ticket", uniqueConstraints = {@UniqueConstraint(columnNames={"id"})})
 public class Ticket {
