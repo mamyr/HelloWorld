@@ -39,7 +39,7 @@ public class CustomArrayList<E> {
             y++;
             x++;
         }
-        y++;
+        y++;//y=i+1;
         while(y<=this.size-1){
             newList.set(x,this.array[y]);
             y++;
