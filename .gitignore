@@ -3,10 +3,10 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 .idea/
-target/
-gradle/
-build/
 .gradle/
+build/
+gradle/
+target/
 
 ### Eclipse ###
 .apt_generated

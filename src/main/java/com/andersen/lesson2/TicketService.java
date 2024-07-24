@@ -65,12 +65,12 @@ public class TicketService implements Service {
         );
     }
 
-    public static void saveCreateTime(long time, Ticket t){
+    public static void saveCreateTime(long time,Ticket t){
         t.setCreatTime(time/1000L);
         logger.info("Creation time is saved.");
     }
 
-    public static void savePrice(int price, Ticket t){
+    public static void savePrice(int price,Ticket t){
         t.setPrice(price);
         logger.info("Price is saved.");
     }
