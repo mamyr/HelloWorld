@@ -1,5 +1,8 @@
 package com.andersen.lesson10;
 
+import com.andersen.lesson10.controllers.TicketController;
+import com.andersen.lesson10.services.NotificationSender;
+import com.andersen.lesson10.services.NotificationSenderImpl;
 import com.andersen.lesson10.services.TicketDaoImpl;
 import com.andersen.lesson10.services.UserDaoImpl;
 import jakarta.persistence.EntityManagerFactory;
@@ -11,10 +14,8 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Scope;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -24,6 +25,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import java.util.Properties;
 
 @Configuration
+@PropertySource("classpath:/config/application.properties")
 public class HibernateConf {
     @PersistenceUnit
     private EntityManagerFactory entityManagerFactory;
@@ -112,5 +114,16 @@ public class HibernateConf {
         ticketDAO.setTemplate(sessionFactory());
 
         return ticketDAO;
+    }
+
+    @Bean(name = "ticketController")
+    public static TicketController ticketController() {
+        return new TicketController(ticketDao());
+    }
+
+    @Bean(name = "ThisIsMyFirstConditionalBean")
+    @ConditionalOnProperty(prefix="notification", name = "service", havingValue = "email")
+    public static NotificationSenderImpl notificationSender() {
+        return new NotificationSenderImpl();
     }
 }

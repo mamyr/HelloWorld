@@ -77,5 +77,10 @@
     <bean id="ticketDao" class="com.andersen.lesson10.services.TicketDaoImpl">
         <property name="emf" ref="sessionFactory"></property>
     </bean>
+    <bean id="ticketController" class="com.andersen.lesson10.controllers.TicketController">
+        <property name="ticketDao" ref="ticketDao"></property>
+    </bean>
 
+    <bean id="ThisIsMyFirstConditionalBean" class="com.andersen.lesson10.services.NotificationSenderImpl">
+    </bean>
 </beans>

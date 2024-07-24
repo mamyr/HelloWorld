@@ -1,5 +1,7 @@
 package com.andersen.lesson9.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -23,6 +25,9 @@ public class User {
     // A user can have many tickets
     @OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
     //@JoinColumn(name="user_id")
+    @JsonIgnoreProperties(ignoreUnknown = true,
+            value = {"hibernateLazyInitializer", "handler", "created"})
+    @JsonIgnore
     private Set<Ticket> ticketList;
 
     public  void setTicketList(Set<Ticket> ticketList){

@@ -1,5 +1,7 @@
 package com.andersen.lesson9.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -25,6 +27,9 @@ public class Ticket {
     @ManyToOne
     //@Cascade(value={CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties(ignoreUnknown = true,
+            value = {"hibernateLazyInitializer", "handler", "created"})
+    @JsonIgnore
     private User user;
 
     @Enumerated(EnumType.STRING)
