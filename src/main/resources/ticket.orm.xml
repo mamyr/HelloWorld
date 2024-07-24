@@ -3,29 +3,20 @@
         "-//Hibernate/Hibernate Mapping DTD//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <!-- This is the place where User POJO class and user table mapping -->
     <class name = "com.andersen.lesson9.Models.Ticket" table = "public.ticket">
-        <meta attribute = "class-description">
-            This class contains the ticket detail. This is optional
-        </meta>
-
         <id name = "id" type = "int" column = "id">
             <generator class="increment">
                 <param name="sequence">ticket_seq</param>
             </generator>
         </id>
-
-        <!--property name = "user" column = "user_id" type = "User"/-->
         <many-to-one name="user" column="user_id"
                      class="com.andersen.lesson9.Models.User" />
-
         <property name="ticketType" column="ticket_type">
             <type name="org.hibernate.type.EnumType">
                 <param name="enumClass">com.andersen.lesson9.Models.TicketType</param>
                 <param name="type">12</param>
             </type>
         </property>
-        <!--property name="ticketType" column="ticket_type" type="com.andersen.lesson9.Models.Ticket.TicketType"/-->
         <property name = "creationDate" column = "creation_date" type = "timestamp"/>
     </class>
 </hibernate-mapping>

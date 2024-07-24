@@ -2,7 +2,6 @@ package com.andersen.lesson9.Repositories;
 
 import com.andersen.lesson9.Models.User;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -28,24 +27,19 @@ public class UserRepository {
         Session session = sessionFactory.openSession();
         Transaction t = session.beginTransaction();
 
-        /*EntityManager em = sessionFactory.createEntityManager();
-
-        newTransaction = em.getTransaction();*/
-
         try {
             if (user.getId() == null) {
-                session.persist(user);  //em.persist(user);
+                session.persist(user);
             } else {
                 session.merge(user);
             }
         } catch (Exception ex) {
             logger.severe("Problem saving user entity <{}>"+user.getId());
             logger.severe(ex.getMessage());
-            t.rollback();//newTransaction.rollback();
+            t.rollback();
         } finally {
-            t.commit();//commitTransactionIfNeeded(newTransaction);
+            t.commit();
         }
-        //em.flush();
         logger.info("User is saved: {}"+user.getId());
         session.close();
         return user;
@@ -60,33 +54,28 @@ public class UserRepository {
     }
 
     public User getUserById(Integer id){
-        //EntityManager em = sessionFactory.createEntityManager();
         Session session = sessionFactory.openSession();
-        TypedQuery<User> query = session.createQuery("From User Where id="+id.toString(), User.class);
+        TypedQuery<User> query = (TypedQuery<User>) session.createQuery("From User Where id="+id.toString());
         return query.getSingleResult();
     }
 
-    @Transactional
     public void deleteUserById(Integer id) {
-        //EntityManager em = sessionFactory.createEntityManager();
         Session session = sessionFactory.openSession();
         Transaction t = session.beginTransaction();
-        Query query = session.createQuery("DELETE FROM Ticket WHERE user.id="+id.toString());
+        Query query = (Query) session.createQuery("DELETE FROM Ticket WHERE user.id="+id.toString());
         query.executeUpdate();
-        query = session.createQuery("DELETE FROM User WHERE id="+id.toString());
+        query = (Query) session.createQuery("DELETE FROM User WHERE id="+id.toString());
         query.executeUpdate();
         t.commit();
         session.close();
     }
 
-    @Transactional
     public void updateTicketByUserIdAndUserId(User user, Integer id) {
-        //EntityManager em = sessionFactory.createEntityManager();
         Session session = sessionFactory.openSession();
         Transaction t = session.beginTransaction();
-        Query query = session.createQuery("UPDATE User SET id="+id.toString()+" WHERE id="+user.getId().toString());
+        Query query = (Query) session.createQuery("UPDATE User SET id="+id.toString()+" WHERE id="+user.getId().toString());
         query.executeUpdate();
-        query = session.createQuery("UPDATE Ticket SET user_id="+id.toString()+" WHERE user_id="+user.getId().toString());
+        query = (Query) session.createQuery("UPDATE Ticket SET user_id="+id.toString()+" WHERE user_id="+user.getId().toString());
         query.executeUpdate();
         t.commit();
         session.close();

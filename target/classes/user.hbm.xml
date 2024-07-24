@@ -10,7 +10,9 @@
         </meta>
 
         <id name = "id" type = "int" column = "id">
-            <generator class="native"/>
+            <generator class="native">
+                <param name="sequence">user_seq</param>
+            </generator>
         </id>
 
         <property name = "name" column = "name" type = "string"/>

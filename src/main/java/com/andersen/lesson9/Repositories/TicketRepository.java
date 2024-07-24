@@ -2,7 +2,6 @@ package com.andersen.lesson9.Repositories;
 
 import com.andersen.lesson9.Models.Ticket;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -29,22 +28,19 @@ public class TicketRepository {
         Session session = sessionFactory.openSession();
         Transaction t = session.beginTransaction();
 
-/*        EntityManager em = sessionFactory.createEntityManager();
-        newTransaction = em.getTransaction();*/
         try {
             if (ticket.getId() == null) {
-                session.save(ticket); //em.persist(ticket);
-            } /*else {
-                em.merge(ticket);
-            }*/
+                session.save(ticket);
+            } else {
+                session.merge(ticket);
+            }
         } catch (Exception ex) {
             logger.severe("Problem saving individual entity <{}>"+ticket.getId());
             logger.severe(ex.getMessage());
-            t.rollback();//newTransaction.rollback();
+            t.rollback();
         } finally {
-            t.commit();//commitTransactionIfNeeded(newTransaction);
+            t.commit();
         }
-        //em.flush();
         logger.info("Entity is saved: {}"+ticket.getId());
         session.close();
         return ticket;
@@ -59,24 +55,20 @@ public class TicketRepository {
     }
 
     public Ticket getTicketById(Integer id){
-//        EntityManager em = sessionFactory.createEntityManager();
         Session session = sessionFactory.openSession();
 
-        TypedQuery<Ticket> query = session.createQuery("From Ticket Where id="+id.toString(), Ticket.class);
+        TypedQuery<Ticket> query = (TypedQuery<Ticket>) session.createQuery("From Ticket Where id="+id.toString());
         return query.getSingleResult();
     }
 
     public List<Ticket> getTicketByUserId(Integer id){
-        //EntityManager em = sessionFactory.createEntityManager();
         Session session = sessionFactory.openSession();
 
-        TypedQuery<Ticket> query = session.createQuery("From Ticket Where user.id="+id.toString(), Ticket.class);
+        TypedQuery<Ticket> query = (TypedQuery<Ticket>) session.createQuery("From Ticket Where user.id="+id.toString());
         return query.getResultList();
     }
 
-    @Transactional
     public void updateTicketType(Ticket ticket) {
-        //EntityManager em = sessionFactory.createEntityManager();
         Session session = sessionFactory.openSession();
         Transaction t = session.beginTransaction();
 
@@ -85,7 +77,5 @@ public class TicketRepository {
 
         t.commit();
         session.close();
-/*        Query query = em.createQuery("UPDATE Ticket SET ticket_type="+ticket.getTicketType().toString()+" WHERE id="+ticket.getId().toString());
-        query.executeUpdate();*/
     }
 }

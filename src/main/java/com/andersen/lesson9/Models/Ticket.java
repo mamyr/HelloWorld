@@ -1,15 +1,14 @@
 package com.andersen.lesson9.Models;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.CascadeType;
 
 import java.sql.Timestamp;
 import java.util.Objects;
 
 @org.hibernate.annotations.NamedQueries({ @org.hibernate.annotations.NamedQuery(name = "Ticket_GetTicketById", query = "from Ticket where id = :id"),
-        @org.hibernate.annotations.NamedQuery(name = "Ticket_GetTicketByUserId", query = "from Ticket where User.id = :userId"),
+        @org.hibernate.annotations.NamedQuery(name = "Ticket_GetTicketByUserId", query = "from Ticket t, User u where u.id = :userId and u=t.user"),
         @org.hibernate.annotations.NamedQuery(name = "Ticket_UpdateTicketTypeById", query = "Update Ticket set ticketType = :newTicketType where id = :id")})
 @Entity
 @Table(name = "public.ticket", uniqueConstraints = {@UniqueConstraint(columnNames={"id"})})
@@ -31,7 +30,15 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     @Column(name="ticket_type")
     private TicketType ticketType;
+    @Column(name="creation_date")
     private Timestamp creationDate;
+
+    public static Ticket from(User user, TicketType ticket_type) {
+        Ticket ticket = new Ticket();
+        ticket.setTicketType(ticket_type);
+        ticket.setUser(user);
+        return ticket;
+    }
 
     public void setId(Integer id){
         this.id = id;
